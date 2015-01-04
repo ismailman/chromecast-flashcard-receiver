@@ -48,6 +48,7 @@ _.extend(App.prototype, {
 	},
 
 	_onMessage: function(message){
+		console.log('message:', message);
 		document.body.classList.add('active');
 		this._card.text = message.data;
 		this._card.style.display = '';
