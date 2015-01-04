@@ -49,7 +49,8 @@ _.extend(App.prototype, {
 
 	_onMessage: function(message){
 		document.body.classList.add('active');
-		card.text = message.data;
+		this._card.text = message.data;
+		this._card.style.display = '';
 	}
 
 });
