@@ -57,18 +57,21 @@ _.extend(App.prototype, {
 
 	_startShowing: function(data){
 		this._stopper.push(null);
+		var card = this._card;
 
 		document.body.classList.remove('active');
+		card.style.display = 'none';
+		card.textContent = '';
+
 		var activate = _.once(function(){
 			document.body.classList.add('active');
+			card.style.display = '';
 		});
 
 		this._card.style.display = '';
 		var interval = data.interval;
 
 		var words = data.words;
-		var card = this._card;
-
 		Bacon.interval(interval, null)
 			 .takeUntil(this._stopper)
 			 .map(function(){
