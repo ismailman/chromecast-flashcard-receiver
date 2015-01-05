@@ -7,7 +7,7 @@ var App = function(){
 	this._messageBus.onMessage = this._onMessage.bind(this);
 
 	this._card = document.getElementById('card');
-	this._stopper = new Bacon.Bus();
+	this._data = null;
 };
 
 _.extend(App.prototype, {
@@ -56,8 +56,8 @@ _.extend(App.prototype, {
 	},
 
 	_startShowing: function(data){
-		this._stopper.push(null);
 		var card = this._card;
+		this._data = data;
 
 		document.body.classList.remove('active');
 		card.style.display = 'none';
@@ -72,8 +72,11 @@ _.extend(App.prototype, {
 		var interval = data.interval;
 
 		var words = data.words;
+		var self = this;
 		Bacon.interval(interval, null)
-			 .takeUntil(this._stopper)
+			 .takeWhile(function(){
+			 	return data === self._data;
+			 })
 			 .map(function(){
 			 	var index = Math.floor(Math.random() * words.length);
 			 	return words[index];
