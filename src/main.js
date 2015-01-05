@@ -1,10 +1,11 @@
 var _ = require('lodash');
+var Bacon = require('baconjs');
 
 var App = function(){
 
 	this._setupCastReceiver();
-
 	this._messageBus.onMessage = this._onMessage.bind(this);
+
 	this._card = document.getElementById('card');
 };
 
@@ -48,13 +49,31 @@ _.extend(App.prototype, {
 	},
 
 	_onMessage: function(message){
-		console.log('message:', message);
+		var data = JSON.parse(message.data);
+
+		this._startShowing(data);
+	},
+
+	_startShowing: function(data){
 		document.body.classList.add('active');
-		this._card.text = message.data;
+
 		this._card.style.display = '';
+		var interval = data.interval;
+
+		var words = data.words;
+		var card = this._card;
+
+		Bacon.interval(interval, null)
+			 .map(function(){
+			 	var index = Math.floor(Math.random() * words.length);
+			 	return words[index];
+			 })
+			 .onValue(function(word){
+			 	card.textContent = word;
+			 });
 	}
 
 });
 
 
-var app = new App();
+window.app = new App();
