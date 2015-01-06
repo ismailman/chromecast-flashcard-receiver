@@ -73,13 +73,9 @@ _.extend(App.prototype, {
 
 		var words = data.words;
 		var self = this;
-		Bacon.interval(interval, null)
+		Bacon.repeatedly(interval, words)
 			 .takeWhile(function(){
 			 	return data === self._data;
-			 })
-			 .map(function(){
-			 	var index = Math.floor(Math.random() * words.length);
-			 	return words[index];
 			 })
 			 .onValue(function(word){
 			 	activate();
